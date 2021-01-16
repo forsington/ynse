@@ -1,22 +1,15 @@
 # ynse
 A CLI for importing swedish bank statements to You Need A Budget (YNAB).
 
-I created this for personal use, since using collecting and converting bank statements to QIF for YNAB was just to time consuming.
+I created this for personal semi-automated use, since using collecting and converting bank statements to QIF for YNAB was just to time consuming.
 
 ## How it works
 * Create a YNAB API key, docs [here](https://api.youneedabudget.com/#authentication)
-* Run `ynse budgets` to list your budgets / accounts
+* Find the ID:s for the budget / account you want to use
+```ynse budgets --api-key your-key-here```
 * Import files either individually or specify a directory. Transactions that already exist will not be imported again.
+```ynse import shb -f kontrotransactionlist.xls --api-key your-key-here --budget-id some-budget-id-here```
 * BAM, your transactions are now in YNAB, ready to be approved. Remember, always double check that the balances match up!
-
-## Examples 
-`ynse budgets --api-key your-key-here`
-
-`ynse import shb -f kontrotransactionlist.xls --api-key your-key-here --budget-id some-budget-id-here`
-
-`ynse import shb -d /dir/where/you/keep/this/accounts/statements --api-key your-key-here --budget-id some-budget-id-here`
-
-## flags
 
 ## TODO
 - [x] Cobra commands
