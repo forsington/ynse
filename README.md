@@ -7,11 +7,11 @@ I created this for personal semi-automated use, since using collecting and conve
 * Create a YNAB API key, docs [here](https://api.youneedabudget.com/#authentication)
 * Find the ID:s for the budget / account you want to use
 
-```ynse budgets --api-key your-key-here```
+```ynse budgets --api-key <your-key>```
 
 * Import files either individually or specify a directory. Transactions that already exist will not be imported again.
 
-```ynse import shb -f kontrotransactionlist.xls --api-key your-key-here --budget-id some-budget-id-here```
+```ynse import shb -f kontrotransactionlist.xls --api-key <your-key> --budget-id <some-id> --account-id <some-id>```
 
 * BAM, your transactions are now in YNAB, ready to be approved. Remember, always double check that the balances match up!
 
