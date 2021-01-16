@@ -21,14 +21,14 @@ I created this for personal use, since using collecting and converting bank stat
 ## TODO
 - [x] Cobra commands
 - [ ] Flag parse
-    -f --file File to import 
-    -d --dir Directory to import files from 
-    --api-key  YNAB API Key (docs [here](https://api.youneedabudget.com/#authentication) 
-    --budget-id  YNAB Budget ID (see [here](https://api.youneedabudget.com/#quick-start))
-    --account-id  YNAB Account ID, run `ynse budgets` to list your budgets / accounts 
-    --force
-    --dry-run
-    --allow-duplicates
+    - [ ] -f --file File to import 
+    - [ ] -d --dir Directory to import files from 
+    - [ ] --api-key  YNAB API Key (docs [here](https://api.youneedabudget.com/#authentication) 
+    - [ ] --budget-id  YNAB Budget ID (see [here](https://api.youneedabudget.com/#quick-start))
+    - [ ] --account-id  YNAB Account ID, run `ynse budgets` to list your budgets / accounts 
+    - [ ] --force
+    - [ ] --dry-run
+    - [ ] --allow-duplicates
 - [ ] makefile
 - [ ] golangci-lint
 - [ ] unit tests
