@@ -26,12 +26,12 @@ I created this for personal semi-automated use, since using collecting and conve
     - [ ] --force
     - [ ] --dry-run
     - [ ] --allow-duplicates
-- [ ] makefile
-- [ ] golangci-lint
+    - [ ] --cutoff
+- [x] makefile
+- [x] golangci-lint
+- [ ] `budgets`
 - [ ] unit tests
-- [ ] bank + supported list
 - [ ] confirmation before import
-- [ ] dry run
 - [ ] ignore duplicates
 - [ ] support more banks
     - [ ] Nordea
@@ -39,5 +39,4 @@ I created this for personal semi-automated use, since using collecting and conve
     - [ ] Swedbank
     - [ ] Länsförsäkringar
     - [ ] Danske Bank
-- [ ] file location
 - [ ] public readme
