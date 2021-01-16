@@ -1,0 +1,20 @@
+#
+# f0.rs golangci-lint configuration file
+# DO NOT DISTRIBUTE
+# author: @forsington
+#
+
+linters:
+  enable:
+    - bodyclose
+    - goconst
+    - gofmt
+    - goimports
+    - gomnd
+    - gosec
+    - misspell
+  fast: true
+
+linters-settings:
+  goconst:
+    min-occurences: 2
