@@ -17,14 +17,24 @@ limitations under the License.
 */
 
 import (
+	"fmt"
+
 	"github.com/spf13/cobra"
 )
 
 // importCmd represents the import command
 var importCmd = &cobra.Command{
-	Use:   "import",
+	Use:   "import {-f file | -d dir} --api-key key --budget-id abcd --account-id abcd",
 	Short: "import a file or all files from a directory",
 	Long:  `import transactions from bank statement files to a YNAB budget`,
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("import called")
+
+		// call import
+
+		// push to budget & account
+
+	},
 }
 
 func init() {
