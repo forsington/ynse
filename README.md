@@ -20,6 +20,7 @@ I created this for personal semi-automated use, since using collecting and conve
 - [ ] Flag parse
     - [ ] -f --file File to import 
     - [ ] -d --dir Directory to import files from 
+    - [ ] -b --bank (shb, seb, nordea, swedbank)
     - [ ] --api-key  YNAB API Key (docs [here](https://api.youneedabudget.com/#authentication) 
     - [ ] --budget-id  YNAB Budget ID (see [here](https://api.youneedabudget.com/#quick-start))
     - [ ] --account-id  YNAB Account ID, run `ynse budgets` to list your budgets / accounts 

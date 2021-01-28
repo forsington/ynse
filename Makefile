@@ -6,7 +6,7 @@ test:
 
 test-verbose:
 	gotest `go list ./...` -coverprofile=coverage.txt
-	mkdir coverage
+	mkdir -p coverage
 	go tool cover -html=coverage.txt -o coverage/ynse.html
 	open coverage/ynse.html
 	rm coverage.txt
