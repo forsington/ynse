@@ -1,9 +1,10 @@
 package importer
 
 import (
+	"testing"
+
 	"github.com/forsington/ynse/bank"
 	"github.com/hashicorp/go-hclog"
-	"testing"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -16,7 +17,6 @@ func TestImporter_Import(t *testing.T) {
 
 	_, err = i.Import("test", "test", bank.SEB)
 	assert.EqualError(t, err, bank.ErrParserNotFound.Error())
-
 
 	// no filename or path
 	_, err = i.Import("", "", bank.SHB)
