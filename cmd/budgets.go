@@ -17,6 +17,7 @@ package cmd
 
 import (
 	"fmt"
+
 	"github.com/forsington/ynse/budget"
 	"github.com/spf13/viper"
 
@@ -30,7 +31,7 @@ var budgetsCmd = &cobra.Command{
 	Long:  `Prints the available budgets and accounts for the given API Key.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		apiKey := viper.GetString("apiKey")
-		srvc := budget.New(apiKey)
+		srvc := budget.New(budget.NewRepo(apiKey))
 
 		budgets, err := srvc.Get()
 		if err != nil {

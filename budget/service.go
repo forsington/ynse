@@ -15,9 +15,9 @@ type serviceImpl struct {
 }
 
 // New returns a new Budget service
-func New(apiKey string) Service {
+func New(repo Repo) Service {
 	return &serviceImpl{
-		repo: NewRepo(apiKey),
+		repo: repo,
 	}
 }
 
