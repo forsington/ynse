@@ -14,6 +14,7 @@ type Parser interface {
 var (
 	ErrParserNotFound = errors.New("parser not found")
 )
+
 const (
 	SHB      = "shb"
 	SEB      = "seb"
