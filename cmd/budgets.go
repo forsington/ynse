@@ -17,30 +17,43 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/forsington/ynse/budget"
+	"github.com/spf13/viper"
 
 	"github.com/spf13/cobra"
 )
 
 // budgetsCmd represents the budgets command
 var budgetsCmd = &cobra.Command{
-	Use:   "budgets",
+	Use:   "budgets <budget-id>",
 	Short: "list budgets and accounts",
 	Long:  `Prints the available budgets and accounts for the given API Key.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("budgets called")
+		apiKey := viper.GetString("apiKey")
+		srvc := budget.New(apiKey)
+
+		budgets, err := srvc.Get()
+		if err != nil {
+			fmt.Println("error in service", err.Error())
+			return
+		}
+
+		fmt.Println("\nBudgets")
+		for _, budget := range budgets {
+			fmt.Printf("├──├ %s\n", budget.Name)
+			fmt.Printf("   ├─── ID: %s\n", budget.ID)
+			fmt.Printf("   ├──├ Accounts\n")
+			for _, acc := range budget.Accounts {
+				fmt.Printf("      ├──├ %s\n", acc.Name)
+				fmt.Printf("         ├── ID: %s\n", acc.ID)
+
+			}
+			fmt.Printf("\n")
+
+		}
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(budgetsCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// budgetsCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// budgetsCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
