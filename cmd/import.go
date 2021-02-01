@@ -18,6 +18,7 @@ limitations under the License.
 
 import (
 	"fmt"
+
 	"github.com/forsington/ynse/bank"
 	"github.com/forsington/ynse/budget"
 	"github.com/forsington/ynse/importer"
@@ -68,9 +69,8 @@ var importCmd = &cobra.Command{
 func init() {
 	importCmd.PersistentFlags().StringP("budget-id", "b", "", "your YNAB Budget ID")
 	_ = viper.BindPFlag("budgetID", importCmd.PersistentFlags().Lookup("budget-id"))
-	importCmd.MarkFlagRequired("budget-id")
 
-	importCmd.PersistentFlags().StringP("account-id", "c", "", "your YNAB Account ID")
+	importCmd.PersistentFlags().String("account-id", "", "your YNAB Account ID")
 	_ = viper.BindPFlag("accountID", importCmd.PersistentFlags().Lookup("account-id"))
 
 	importCmd.PersistentFlags().StringP("filename", "f", "", "path to file")
@@ -79,7 +79,7 @@ func init() {
 	importCmd.PersistentFlags().StringP("dir", "d", "", "path to directory")
 	_ = viper.BindPFlag("dir", importCmd.PersistentFlags().Lookup("dir"))
 
-	importCmd.PersistentFlags().StringP("bank", "k", "", "bank for the file to import")
+	importCmd.PersistentFlags().String("bank", "", "bank for the file to import")
 	_ = viper.BindPFlag("bank", importCmd.PersistentFlags().Lookup("bank"))
 
 	importCmd.PersistentFlags().Bool("allow-duplicates", false, "skip fuzzy check for existing transaction duplication")

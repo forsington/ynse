@@ -30,6 +30,6 @@ func (m *MockYNAB) GetTransactions(budgetID string, accountID string) ([]*Transa
 	panic("implement me")
 }
 
-func (m *MockYNAB) SendTransactions(budgetID string, accountID string, transactions []*Transaction) ([]*Transaction, error) {
+func (m *MockYNAB) SendTransactions(budgetID string, accountID string, transactions []*Transaction) ([]string, error) {
 	panic("implement me")
 }

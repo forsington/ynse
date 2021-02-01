@@ -4,12 +4,11 @@ import (
 	"testing"
 
 	"github.com/forsington/ynse/bank"
-	"github.com/hashicorp/go-hclog"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestImporter_Import(t *testing.T) {
-	i := New(hclog.NewNullLogger(), bank.ImplementedParsers)
+	i := New(bank.ImplementedParsers)
 
 	// invalid bank
 	_, err := i.Import("test", "test", "")

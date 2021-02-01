@@ -26,7 +26,7 @@ func TestServiceImpl_Get(t *testing.T) {
 
 	// Get Accounts error
 	repo = NewMockYNAB()
-	someBudgets := []*Budget{&Budget{ID: "test", Name: "test"}}
+	someBudgets := []*Budget{{ID: "test", Name: "test"}}
 	repo.On("Budgets").Return(someBudgets, nil)
 	repo.On("Accounts", "test").Return(nil, someErr)
 	srvc = New(repo)
@@ -35,9 +35,9 @@ func TestServiceImpl_Get(t *testing.T) {
 
 	// OK
 	repo = NewMockYNAB()
-	someBudgets = []*Budget{&Budget{ID: "test", Name: "test"}}
+	someBudgets = []*Budget{{ID: "test", Name: "test"}}
 	repo.On("Budgets").Return(someBudgets, nil)
-	someAccounts := []*Account{&Account{ID: "test", Name: "test"}}
+	someAccounts := []*Account{{ID: "test", Name: "test"}}
 	repo.On("Accounts", "test").Return(someAccounts, nil)
 	srvc = New(repo)
 	_, err = srvc.Get()
