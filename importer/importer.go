@@ -4,10 +4,10 @@ import (
 	"errors"
 	"io/ioutil"
 	"os"
+	"strings"
 
 	"github.com/forsington/ynse/bank"
 	"github.com/forsington/ynse/budget"
-	"github.com/hashicorp/go-hclog"
 )
 
 type Importer interface {
@@ -15,7 +15,6 @@ type Importer interface {
 }
 
 type importerImpl struct {
-	logger  hclog.Logger
 	parsers bank.Parsers
 }
 
@@ -23,9 +22,8 @@ var (
 	ErrNoFileOrDir = errors.New("filename or dir must be specified")
 )
 
-func New(logger hclog.Logger, parsers bank.Parsers) Importer {
+func New(parsers bank.Parsers) Importer {
 	return &importerImpl{
-		logger:  logger,
 		parsers: parsers,
 	}
 }
@@ -52,8 +50,6 @@ func (i *importerImpl) Import(filename, dir, bank string) ([]*budget.Transaction
 		return nil, ErrNoFileOrDir
 	}
 
-	// clean up transactions
-
 	return transactions, nil
 }
 
@@ -75,7 +71,10 @@ func readDir(dir string, parser bank.Parser) ([]*budget.Transaction, error) {
 	}
 
 	for _, file := range files {
-		f, err := os.Open(file.Name())
+		if strings.HasPrefix(file.Name(), ".") {
+			continue
+		}
+		f, err := os.Open(dir + file.Name())
 		if err != nil {
 			return nil, err
 		}
@@ -83,7 +82,31 @@ func readDir(dir string, parser bank.Parser) ([]*budget.Transaction, error) {
 		if err != nil {
 			return nil, err
 		}
+
+		// there might be transactions that existing in multiple files, remove these duplicates
+		newTransactions = removeDuplicateTransactions(transactions, newTransactions)
 		transactions = append(transactions, newTransactions...)
 	}
 	return transactions, nil
+}
+
+func removeDuplicateTransactions(existing, incoming []*budget.Transaction) []*budget.Transaction {
+	var cleanTransactions []*budget.Transaction
+	for _, incomingTransaction := range incoming {
+		duplicate := false
+
+		for _, existingTransaction := range existing {
+			// fuzzy matching for existing transactions to avoid duplicates
+			if incomingTransaction.Date == existingTransaction.Date &&
+				incomingTransaction.Amount == existingTransaction.Amount &&
+				incomingTransaction.PayeeName == existingTransaction.PayeeName {
+				duplicate = true
+			}
+		}
+		if !duplicate {
+			cleanTransactions = append(cleanTransactions, incomingTransaction)
+		}
+	}
+
+	return cleanTransactions
 }

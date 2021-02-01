@@ -9,11 +9,10 @@ import (
 
 func TestServiceImpl_Get(t *testing.T) {
 
+	// repo error
 	repo := NewMockYNAB()
 	someErr := errors.New("testing-error")
 	repo.On("Budgets").Return(nil, someErr)
-
-	// repo error
 	srvc := New(repo)
 	_, err := srvc.Get()
 	assert.EqualError(t, err, someErr.Error())

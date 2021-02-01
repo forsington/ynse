@@ -18,6 +18,9 @@ limitations under the License.
 
 import (
 	"fmt"
+	"github.com/forsington/ynse/bank"
+	"github.com/forsington/ynse/budget"
+	"github.com/forsington/ynse/importer"
 
 	"github.com/spf13/viper"
 
@@ -30,18 +33,57 @@ var importCmd = &cobra.Command{
 	Short: "import a file or all files from a directory",
 	Long:  `import transactions from bank statement files to a YNAB budget`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("import called")
 
 		apiKey := viper.GetString("apiKey")
-		fmt.Println("apiKey", apiKey)
+		accountID := viper.GetString("accountID")
+		budgetID := viper.GetString("budgetID")
+		filename := viper.GetString("filename")
+		dir := viper.GetString("dir")
+		bankName := viper.GetString("bank")
+		allowDuplicates := viper.GetBool("allowDuplicates")
+
 		// call import
-
+		imp := importer.New(bank.ImplementedParsers)
+		transactions, err := imp.Import(filename, dir, bankName)
+		if err != nil {
+			fmt.Println("error:", err)
+			return
+		}
 		// push to budget & account
+		budget := budget.New(budget.NewRepo(apiKey))
+		trans, err := budget.Push(budgetID, accountID, transactions, allowDuplicates)
+		if err != nil {
+			fmt.Println("error:", err)
+			return
+		}
 
+		if len(trans) == 0 {
+			fmt.Println("no new transactions to import, exiting...")
+		} else {
+			fmt.Println("successfully imported", len(trans), "transactions")
+		}
 	},
 }
 
 func init() {
+	importCmd.PersistentFlags().StringP("budget-id", "b", "", "your YNAB Budget ID")
+	_ = viper.BindPFlag("budgetID", importCmd.PersistentFlags().Lookup("budget-id"))
+	importCmd.MarkFlagRequired("budget-id")
+
+	importCmd.PersistentFlags().StringP("account-id", "c", "", "your YNAB Account ID")
+	_ = viper.BindPFlag("accountID", importCmd.PersistentFlags().Lookup("account-id"))
+
+	importCmd.PersistentFlags().StringP("filename", "f", "", "path to file")
+	_ = viper.BindPFlag("filename", importCmd.PersistentFlags().Lookup("filename"))
+
+	importCmd.PersistentFlags().StringP("dir", "d", "", "path to directory")
+	_ = viper.BindPFlag("dir", importCmd.PersistentFlags().Lookup("dir"))
+
+	importCmd.PersistentFlags().StringP("bank", "k", "", "bank for the file to import")
+	_ = viper.BindPFlag("bank", importCmd.PersistentFlags().Lookup("bank"))
+
+	importCmd.PersistentFlags().Bool("allow-duplicates", false, "skip fuzzy check for existing transaction duplication")
+	_ = viper.BindPFlag("allowDuplicates", importCmd.PersistentFlags().Lookup("allow-duplicates"))
 
 	rootCmd.AddCommand(importCmd)
 }
