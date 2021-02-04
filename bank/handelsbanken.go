@@ -84,9 +84,8 @@ func (h *Handelsbanken) ReadFile(f *os.File) ([]*budget.Transaction, error) {
 				}
 
 				if transaction.Date.IsZero() {
-					fmt.Println("transaction has invalid date, skipping:", transaction.PayeeName)
+					fmt.Println("transaction has invalid date, skipping:", transaction.PayeeName, "from", f.Name())
 				} else {
-					fmt.Println("added trans", transaction.Date, transaction.PayeeName, transaction.Amount, f.Name())
 					trans = append(trans, &transaction)
 				}
 			}

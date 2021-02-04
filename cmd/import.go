@@ -18,14 +18,16 @@ limitations under the License.
 
 import (
 	"fmt"
+	"os"
+	"strings"
 
 	"github.com/forsington/ynse/bank"
 	"github.com/forsington/ynse/budget"
 	"github.com/forsington/ynse/importer"
 
-	"github.com/spf13/viper"
-
+	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 // importCmd represents the import command
@@ -42,26 +44,43 @@ var importCmd = &cobra.Command{
 		dir := viper.GetString("dir")
 		bankName := viper.GetString("bank")
 		allowDuplicates := viper.GetBool("allowDuplicates")
+		dryRun := viper.GetBool("dryRun")
+		verbose := viper.GetBool("verbose")
 
 		// call import
 		imp := importer.New(bank.ImplementedParsers)
 		transactions, err := imp.Import(filename, dir, bankName)
 		if err != nil {
-			fmt.Println("error:", err)
+			fmt.Printf("error: %s", err.Error())
 			return
 		}
+
+		PrintPendingTransactions(transactions, verbose)
+
+		if dryRun {
+			fmt.Printf("would have created %d transactions, exiting dry run", len(transactions))
+			return
+		}
+
+		isConfirmed := AskForConfirmation(fmt.Sprintf("%d transactions prepared, please verify that they are correct ", len(transactions)))
+		if !isConfirmed {
+			fmt.Println(" exiting...")
+			return
+		}
+
+		fmt.Printf("connecting to YNAB...\n")
 		// push to budget & account
 		budget := budget.New(budget.NewRepo(apiKey))
 		trans, err := budget.Push(budgetID, accountID, transactions, allowDuplicates)
 		if err != nil {
-			fmt.Println("error:", err)
+			fmt.Printf("error: %s", err.Error())
 			return
 		}
 
 		if len(trans) == 0 {
 			fmt.Println("no new transactions to import, exiting...")
 		} else {
-			fmt.Println("successfully imported", len(trans), "transactions")
+			fmt.Printf("imported %d transactions to YNAB", len(trans))
 		}
 	},
 }
@@ -85,5 +104,47 @@ func init() {
 	importCmd.PersistentFlags().Bool("allow-duplicates", false, "skip fuzzy check for existing transaction duplication")
 	_ = viper.BindPFlag("allowDuplicates", importCmd.PersistentFlags().Lookup("allow-duplicates"))
 
+	importCmd.PersistentFlags().Bool("dry-run", false, "dry run, doesn't create transactions in YNAB")
+	_ = viper.BindPFlag("dryRun", importCmd.PersistentFlags().Lookup("dry-run"))
+
+	importCmd.PersistentFlags().BoolP("verbose", "v", false, "dry run, doesn't create transactions in YNAB")
+	_ = viper.BindPFlag("verbose", importCmd.PersistentFlags().Lookup("verbose"))
+
 	rootCmd.AddCommand(importCmd)
+}
+
+func AskForConfirmation(question string) bool {
+	var s string
+
+	fmt.Printf("%s (y/N): ", question)
+	_, err := fmt.Scan(&s)
+	if err != nil {
+		panic(err)
+	}
+
+	s = strings.TrimSpace(s)
+	s = strings.ToLower(s)
+
+	if s == "y" || s == "yes" {
+		return true
+	}
+	return false
+}
+
+func PrintPendingTransactions(transactions []*budget.Transaction, verbose bool) {
+	t := table.NewWriter()
+	t.SetOutputMirror(os.Stdout)
+	t.AppendHeader(table.Row{"Date", "Payee", "Amount"})
+	t.SetStyle(table.StyleLight)
+
+	for i, transaction := range transactions {
+		if i > 2 && !verbose {
+			t.AppendRow(table.Row{"...", "...", "..."})
+			break
+		}
+		t.AppendRow(table.Row{transaction.Date.Format("2006-01-02"), transaction.PayeeName, fmt.Sprintf("%.2f", float64(transaction.Amount) / 1000)})
+	}
+	t.AppendSeparator()
+	t.Render()
+	fmt.Printf("to display all transactions, re-run with -v flag\n\n")
 }
