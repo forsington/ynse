@@ -2,13 +2,13 @@ package bank
 
 import (
 	"errors"
-	"os"
 
 	"github.com/forsington/ynse/budget"
 )
 
 type Parser interface {
-	ReadFile(f *os.File) ([]*budget.Transaction, error)
+	ReadFile(b []byte) ([]*budget.Transaction, error)
+	Bank() string
 }
 
 var (

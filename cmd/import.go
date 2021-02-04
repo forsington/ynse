@@ -63,7 +63,7 @@ var importCmd = &cobra.Command{
 		}
 
 		fmt.Printf("%d transactions prepared, please verify that they are correct\n", len(transactions))
-		isConfirmed := askForConfirmation(fmt.Sprintf("import them to YNAB?",))
+		isConfirmed := askForConfirmation("import them to YNAB?")
 		if !isConfirmed {
 			fmt.Println("exiting...")
 			return

@@ -3,7 +3,6 @@ package bank
 import (
 	"fmt"
 	"io/ioutil"
-	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -34,21 +33,13 @@ const (
 type Handelsbanken struct {
 }
 
-func (h *Handelsbanken) ReadFile(f *os.File) ([]*budget.Transaction, error) {
-	fmt.Println("parsing Handelsbanken file:", f.Name())
+func (h *Handelsbanken) Bank() string {
+	return SHB
+}
 
-	if !strings.HasSuffix(f.Name(), ".xls") {
-		return []*budget.Transaction{}, nil
-	}
-
-	byteValue, err := ioutil.ReadFile(f.Name())
-	if err != nil {
-		fmt.Println(err)
-		return nil, err
-	}
-
+func (h *Handelsbanken) ReadFile(b []byte) ([]*budget.Transaction, error) {
 	// Convert the latin1 to utf-8
-	var body = strings.NewReader(string(byteValue))
+	var body = strings.NewReader(string(b))
 	r, err := charset.NewReader(body, "latin1")
 	if err != nil {
 		return nil, err

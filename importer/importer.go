@@ -2,6 +2,7 @@ package importer
 
 import (
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"strings"
@@ -35,50 +36,42 @@ func (i *importerImpl) Import(filename, dir, bank string) ([]*budget.Transaction
 		return nil, err
 	}
 
-	var transactions []*budget.Transaction
+	files := []string{}
 	if filename != "" {
-		transactions, err = readFile(filename, parser)
-		if err != nil {
-			return nil, err
-		}
+		files = append(files, filename)
 	} else if dir != "" {
-		transactions, err = readDir(dir, parser)
+		filenames, err := readDir(dir, parser)
 		if err != nil {
 			return nil, err
 		}
+		files = append(files, filenames...)
 	} else {
 		return nil, ErrNoFileOrDir
 	}
 
+	transactions, err := readFiles(files, parser)
+	if err != nil {
+		return nil, err
+	}
 	return transactions, nil
 }
 
-func readFile(filename string, parser bank.Parser) ([]*budget.Transaction, error) {
-	f, err := os.Open(filename)
-	if err != nil {
-		return nil, err
-	}
-
-	return parser.ReadFile(f)
-}
-
-func readDir(dir string, parser bank.Parser) ([]*budget.Transaction, error) {
+func readFiles(files []string, parser bank.Parser) ([]*budget.Transaction, error) {
 	var transactions []*budget.Transaction
 
-	files, err := ioutil.ReadDir(dir)
-	if err != nil {
-		return nil, err
-	}
-
 	for _, file := range files {
-		if strings.HasPrefix(file.Name(), ".") {
-			continue
-		}
-		f, err := os.Open(dir + file.Name())
+		f, err := os.Open(file)
 		if err != nil {
 			return nil, err
 		}
-		newTransactions, err := parser.ReadFile(f)
+
+		fmt.Printf("parsing %s file: %s", parser.Bank(), f.Name())
+		b, err := ioutil.ReadFile( f.Name())
+		if err != nil {
+			return nil, err
+		}
+
+		newTransactions, err := parser.ReadFile(b)
 		if err != nil {
 			return nil, err
 		}
@@ -88,6 +81,22 @@ func readDir(dir string, parser bank.Parser) ([]*budget.Transaction, error) {
 		transactions = append(transactions, newTransactions...)
 	}
 	return transactions, nil
+}
+
+func readDir(dir string, parser bank.Parser) ([]string, error) {
+	files, err := ioutil.ReadDir(dir)
+	if err != nil {
+		return nil, err
+	}
+
+	filenames := []string{}
+	for _, file := range files {
+		if strings.HasPrefix(file.Name(), ".") {
+			continue
+		}
+		filenames = append(filenames, dir + file.Name())
+	}
+	return filenames, nil
 }
 
 func removeDuplicateTransactions(existing, incoming []*budget.Transaction) []*budget.Transaction {

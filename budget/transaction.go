@@ -7,7 +7,7 @@ import (
 
 const (
 	AmountFactor = 1000
-	CurrencySEK = "SEK"
+	CurrencySEK  = "SEK"
 )
 
 // Transaction is the Ynab Representation of a transaction
@@ -23,7 +23,7 @@ type Transaction struct {
 
 // AmountPretty returns a formatted currency string for the amount
 func (t *Transaction) AmountPretty(currency string) string {
-	actualAmount := float64(t.Amount)/AmountFactor
+	actualAmount := float64(t.Amount) / AmountFactor
 	if t.Amount > 0 {
 		return fmt.Sprintf("+%.2f %s", actualAmount, currency)
 	}
