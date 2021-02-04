@@ -55,16 +55,17 @@ var importCmd = &cobra.Command{
 			return
 		}
 
-		PrintPendingTransactions(transactions, verbose)
+		printPendingTransactions(transactions, verbose)
 
 		if dryRun {
 			fmt.Printf("would have created %d transactions, exiting dry run", len(transactions))
 			return
 		}
 
-		isConfirmed := AskForConfirmation(fmt.Sprintf("%d transactions prepared, please verify that they are correct ", len(transactions)))
+		fmt.Printf("%d transactions prepared, please verify that they are correct\n", len(transactions))
+		isConfirmed := askForConfirmation(fmt.Sprintf("import them to YNAB?",))
 		if !isConfirmed {
-			fmt.Println(" exiting...")
+			fmt.Println("exiting...")
 			return
 		}
 
@@ -80,7 +81,7 @@ var importCmd = &cobra.Command{
 		if len(trans) == 0 {
 			fmt.Println("no new transactions to import, exiting...")
 		} else {
-			fmt.Printf("imported %d transactions to YNAB", len(trans))
+			fmt.Printf("imported %d transactions to YNAB\n", len(trans))
 		}
 	},
 }
@@ -113,7 +114,7 @@ func init() {
 	rootCmd.AddCommand(importCmd)
 }
 
-func AskForConfirmation(question string) bool {
+func askForConfirmation(question string) bool {
 	var s string
 
 	fmt.Printf("%s (y/N): ", question)
@@ -131,9 +132,10 @@ func AskForConfirmation(question string) bool {
 	return false
 }
 
-func PrintPendingTransactions(transactions []*budget.Transaction, verbose bool) {
+func printPendingTransactions(transactions []*budget.Transaction, verbose bool) {
 	t := table.NewWriter()
 	t.SetOutputMirror(os.Stdout)
+	t.SetTitle("PREPARED TRANSACTIONS")
 	t.AppendHeader(table.Row{"Date", "Payee", "Amount"})
 	t.SetStyle(table.StyleLight)
 
@@ -142,7 +144,7 @@ func PrintPendingTransactions(transactions []*budget.Transaction, verbose bool) 
 			t.AppendRow(table.Row{"...", "...", "..."})
 			break
 		}
-		t.AppendRow(table.Row{transaction.Date.Format("2006-01-02"), transaction.PayeeName, fmt.Sprintf("%.2f", float64(transaction.Amount) / 1000)})
+		t.AppendRow(table.Row{transaction.Date.Format("2006-01-02"), transaction.PayeeName, transaction.AmountPretty(budget.CurrencySEK)})
 	}
 	t.AppendSeparator()
 	t.Render()
