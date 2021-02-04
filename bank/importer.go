@@ -68,7 +68,7 @@ func readFiles(files []string, parser Parser) ([]*budget.Transaction, error) {
 			return nil, err
 		}
 
-		fmt.Printf("parsing %s file: %s", parser.Bank(), f.Name())
+		fmt.Printf("parsing %s file: %s\n", parser.Bank(), f.Name())
 		b, err := ioutil.ReadFile(f.Name())
 		if err != nil {
 			return nil, err
