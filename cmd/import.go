@@ -23,7 +23,6 @@ import (
 
 	"github.com/forsington/ynse/bank"
 	"github.com/forsington/ynse/budget"
-	"github.com/forsington/ynse/importer"
 
 	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/spf13/cobra"
@@ -48,7 +47,7 @@ var importCmd = &cobra.Command{
 		verbose := viper.GetBool("verbose")
 
 		// call import
-		imp := importer.New(bank.ImplementedParsers)
+		imp := bank.New(bank.ImplementedParsers)
 		transactions, err := imp.Import(filename, dir, bankName)
 		if err != nil {
 			fmt.Printf("error: %s", err.Error())

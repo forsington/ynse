@@ -1,4 +1,4 @@
-package importer
+package bank
 
 import (
 	"errors"
@@ -7,7 +7,6 @@ import (
 	"os"
 	"strings"
 
-	"github.com/forsington/ynse/bank"
 	"github.com/forsington/ynse/budget"
 )
 
@@ -17,7 +16,7 @@ type Importer interface {
 }
 
 type importerImpl struct {
-	parsers bank.Parsers
+	parsers Parsers
 }
 
 var (
@@ -26,7 +25,7 @@ var (
 )
 
 // New returns a new Importer
-func New(parsers bank.Parsers) Importer {
+func New(parsers Parsers) Importer {
 	return &importerImpl{
 		parsers: parsers,
 	}
@@ -60,7 +59,7 @@ func (i *importerImpl) Import(filename, dir, bank string) ([]*budget.Transaction
 	return transactions, nil
 }
 
-func readFiles(files []string, parser bank.Parser) ([]*budget.Transaction, error) {
+func readFiles(files []string, parser Parser) ([]*budget.Transaction, error) {
 	var transactions []*budget.Transaction
 
 	for _, file := range files {
@@ -87,7 +86,7 @@ func readFiles(files []string, parser bank.Parser) ([]*budget.Transaction, error
 	return transactions, nil
 }
 
-func readDir(dir string, parser bank.Parser) ([]string, error) {
+func readDir(dir string, parser Parser) ([]string, error) {
 	files, err := ioutil.ReadDir(dir)
 	if err != nil {
 		return nil, err
