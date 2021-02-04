@@ -11,6 +11,7 @@ import (
 	"github.com/forsington/ynse/budget"
 )
 
+// Importer is an importer of bank transaction statements
 type Importer interface {
 	Import(filename, path, bank string) ([]*budget.Transaction, error)
 }
@@ -20,15 +21,18 @@ type importerImpl struct {
 }
 
 var (
+	// ErrNoFileOrDir is returned when no filename or dir is specified
 	ErrNoFileOrDir = errors.New("filename or dir must be specified")
 )
 
+// New returns a new Importer
 func New(parsers bank.Parsers) Importer {
 	return &importerImpl{
 		parsers: parsers,
 	}
 }
 
+// Import reads a file or dir and returns the transactions found in any files
 func (i *importerImpl) Import(filename, dir, bank string) ([]*budget.Transaction, error) {
 	// run file through parser
 	parser, err := i.parsers.Find(bank)
@@ -66,7 +70,7 @@ func readFiles(files []string, parser bank.Parser) ([]*budget.Transaction, error
 		}
 
 		fmt.Printf("parsing %s file: %s", parser.Bank(), f.Name())
-		b, err := ioutil.ReadFile( f.Name())
+		b, err := ioutil.ReadFile(f.Name())
 		if err != nil {
 			return nil, err
 		}
@@ -94,7 +98,7 @@ func readDir(dir string, parser bank.Parser) ([]string, error) {
 		if strings.HasPrefix(file.Name(), ".") {
 			continue
 		}
-		filenames = append(filenames, dir + file.Name())
+		filenames = append(filenames, dir+file.Name())
 	}
 	return filenames, nil
 }

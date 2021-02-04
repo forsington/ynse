@@ -6,8 +6,10 @@ import (
 )
 
 const (
+	// AmountFactor is the amount by which the actual currency
 	AmountFactor = 1000
-	CurrencySEK  = "SEK"
+	// CurrencySEK is the print string for SEK
+	CurrencySEK = "SEK"
 )
 
 // Transaction is the Ynab Representation of a transaction

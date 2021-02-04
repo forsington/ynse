@@ -30,13 +30,16 @@ const (
 	AmountMultiplier = 1000
 )
 
+// Handelsbanken is the File Parser implementations for Handelsbanken .xls files
 type Handelsbanken struct {
 }
 
+// Bank returns the name of the bank
 func (h *Handelsbanken) Bank() string {
 	return SHB
 }
 
+// ReadFile parsers the file and extracts transactions
 func (h *Handelsbanken) ReadFile(b []byte) ([]*budget.Transaction, error) {
 	// Convert the latin1 to utf-8
 	var body = strings.NewReader(string(b))

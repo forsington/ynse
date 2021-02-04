@@ -3,7 +3,7 @@ package budget
 // Service is the Budget service
 type Service interface {
 	Get() ([]*Budget, error)
-	Push(budgetId, accountID string, transactions []*Transaction, allowDuplicates bool) ([]string, error)
+	Push(budgetID, accountID string, transactions []*Transaction, allowDuplicates bool) ([]string, error)
 }
 
 type serviceImpl struct {

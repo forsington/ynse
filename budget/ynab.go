@@ -6,10 +6,12 @@ import (
 	"go.bmvs.io/ynab/api/transaction"
 )
 
+// Ynab is the YNAB Repo implementation
 type Ynab struct {
 	client yn.ClientServicer
 }
 
+// NewRepo returns a new YNAB Repo
 func NewRepo(apiKey string) Repo {
 	client := yn.NewClient(apiKey)
 
@@ -18,6 +20,7 @@ func NewRepo(apiKey string) Repo {
 	}
 }
 
+// Budgets returns a slice of budgets
 func (y *Ynab) Budgets() ([]*Budget, error) {
 	result, err := y.client.Budget().GetBudgets()
 	if err != nil {
@@ -35,6 +38,7 @@ func (y *Ynab) Budgets() ([]*Budget, error) {
 	return budgets, nil
 }
 
+// Accounts returns a slice of Accounts for a given budget
 func (y *Ynab) Accounts(budgetID string) ([]*Account, error) {
 	result, err := y.client.Account().GetAccounts(budgetID)
 	if err != nil {
@@ -52,6 +56,7 @@ func (y *Ynab) Accounts(budgetID string) ([]*Account, error) {
 	return accounts, nil
 }
 
+// GetTransactions returns all transactions from a given account
 func (y *Ynab) GetTransactions(budgetID string, accountID string) ([]*Transaction, error) {
 	var transactions []*Transaction
 
@@ -74,6 +79,7 @@ func (y *Ynab) GetTransactions(budgetID string, accountID string) ([]*Transactio
 	return transactions, nil
 }
 
+// SendTransactions sends a slice of transactions to YNAB
 func (y *Ynab) SendTransactions(budgetID string, accountID string, transactions []*Transaction) ([]string, error) {
 	if len(transactions) == 0 {
 		return []string{}, nil

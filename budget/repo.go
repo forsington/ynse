@@ -1,5 +1,6 @@
 package budget
 
+// Repo is the budgets repository interface
 type Repo interface {
 	Budgets() ([]*Budget, error)
 	Accounts(budgetID string) ([]*Account, error)
