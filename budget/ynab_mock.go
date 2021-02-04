@@ -32,10 +32,18 @@ func (m *MockYNAB) Accounts(budgetID string) ([]*Account, error) {
 
 // GetTransactions is a mock implementation
 func (m *MockYNAB) GetTransactions(budgetID string, accountID string) ([]*Transaction, error) {
-	panic("implement me")
+	args := m.Called()
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).([]*Transaction), args.Error(1)
 }
 
 // SendTransactions is a mock implementation
 func (m *MockYNAB) SendTransactions(budgetID string, accountID string, transactions []*Transaction) ([]string, error) {
-	panic("implement me")
+	args := m.Called()
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).([]string), args.Error(1)
 }
