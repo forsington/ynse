@@ -98,7 +98,7 @@ func init() {
 	importCmd.PersistentFlags().StringP("dir", "d", "", "path to directory")
 	_ = viper.BindPFlag("dir", importCmd.PersistentFlags().Lookup("dir"))
 
-	importCmd.PersistentFlags().String("bank", "", "bank for the file to import")
+	importCmd.PersistentFlags().String("bank", "", "name of bank to parse files as (SHB, SEB, Nordea, Swedbank)")
 	_ = viper.BindPFlag("bank", importCmd.PersistentFlags().Lookup("bank"))
 
 	importCmd.PersistentFlags().Bool("allow-duplicates", false, "skip fuzzy check for existing transaction duplication")
@@ -107,7 +107,7 @@ func init() {
 	importCmd.PersistentFlags().Bool("dry-run", false, "dry run, doesn't create transactions in YNAB")
 	_ = viper.BindPFlag("dryRun", importCmd.PersistentFlags().Lookup("dry-run"))
 
-	importCmd.PersistentFlags().BoolP("verbose", "v", false, "dry run, doesn't create transactions in YNAB")
+	importCmd.PersistentFlags().BoolP("verbose", "v", false, "verbose output")
 	_ = viper.BindPFlag("verbose", importCmd.PersistentFlags().Lookup("verbose"))
 
 	rootCmd.AddCommand(importCmd)
