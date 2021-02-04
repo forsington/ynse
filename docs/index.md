@@ -1,37 +1,18 @@
-## Welcome to GitHub Pages
+# ynse
+A CLI written in Golang for importing swedish bank statement files to the budgeting software [You Need A Budget (YNAB)](https://www.youneedabudget.com/).
 
-You can use the [editor on GitHub](https://github.com/forsington/ynse/edit/main/docs/index.md) to maintain and preview the content for your website in Markdown files.
+I created this for personal semi-automated use, since collecting and converting bank statements to QIF for YNAB was just to time-consuming.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+## How it works
+* Create a YNAB Personal Access Token, docs [here](https://api.youneedabudget.com/#authentication)
+* Find the ID:s for the budget / account you want to use:
 
-### Markdown
+```ynse budgets -a <your-key>```
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+* Download the transactions statements to be imported to YNAB from your bank.
+* Import files either individually or specify a directory. Transactions that already exist will not be imported again.
 
-```markdown
-Syntax highlighted code block
+```ynse import -a <your-access-token> -b <some-id> --account-id <some-id> --bank shb -d path/to/your/files ```
 
-# Header 1
-## Header 2
-### Header 3
+* BAM, your transactions are now in YNAB, ready to be approved. Remember, always double check that balances match up!
 
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/forsington/ynse/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
