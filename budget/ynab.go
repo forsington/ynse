@@ -12,8 +12,8 @@ type Ynab struct {
 }
 
 // NewRepo returns a new YNAB Repo
-func NewRepo(apiKey string) Repo {
-	client := yn.NewClient(apiKey)
+func NewRepo(accessToken string) Repo {
+	client := yn.NewClient(accessToken)
 
 	return &Ynab{
 		client: client,

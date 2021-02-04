@@ -36,7 +36,7 @@ var importCmd = &cobra.Command{
 	Long:  `import transactions from bank statement files to a YNAB budget`,
 	Run: func(cmd *cobra.Command, args []string) {
 
-		apiKey := viper.GetString("apiKey")
+		accessToken := viper.GetString("accessToken")
 		accountID := viper.GetString("accountID")
 		budgetID := viper.GetString("budgetID")
 		filename := viper.GetString("filename")
@@ -70,7 +70,7 @@ var importCmd = &cobra.Command{
 
 		fmt.Printf("connecting to YNAB...\n")
 		// push to budget & account
-		budget := budget.New(budget.NewRepo(apiKey))
+		budget := budget.New(budget.NewRepo(accessToken))
 		trans, err := budget.Push(budgetID, accountID, transactions, allowDuplicates)
 		if err != nil {
 			fmt.Printf("error: %s", err.Error())

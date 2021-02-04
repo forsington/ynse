@@ -46,6 +46,6 @@ func Execute() {
 }
 
 func init() {
-	rootCmd.PersistentFlags().StringP("api-key", "a", "YNAB-API-KEY-HERE", "your personal YNAB API key")
-	_ = viper.BindPFlag("apiKey", rootCmd.PersistentFlags().Lookup("api-key"))
+	rootCmd.PersistentFlags().StringP("access-token", "a", "YNAB-ACCESS-TOKEN-HERE", "your YNAB Personal Access Token")
+	_ = viper.BindPFlag("accessToken", rootCmd.PersistentFlags().Lookup("access-token"))
 }
