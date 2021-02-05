@@ -4,7 +4,7 @@ A CLI written in Golang for importing swedish bank statement files to the budget
 I created this for personal semi-automated use, since collecting and converting bank statements to QIF for YNAB was just to time-consuming.
 
 ## Installation & Docs
-* [Download the latest build](https://ynse.f0.rs) or [compile it yourself](#Compile)
+* [Download the latest build](https://github.com/forsington/ynse/releases) or [compile it yourself](#Compile)
 * Usage documentation can be [found here](https://ynse.f0.rs)
 
 ## How it works
