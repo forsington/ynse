@@ -5,7 +5,7 @@ I created this for personal semi-automated use, since collecting and converting 
 
 ## Installation & Docs
 * [Download the latest build](https://github.com/forsington/ynse/releases) or [compile it yourself](#Compile)
-* Usage documentation can be [found here](https://ynse.f0.rs)
+* Usage documentation can be [found here](https://forsington.github.io/ynse/)
 
 ## Compile
 * [Install the latest version of Golang](https://golang.org/doc/install)
