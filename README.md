@@ -1,5 +1,5 @@
 # ynse
-A CLI written in Golang for importing swedish bank statement files to the budgeting software [You Need A Budget (YNAB)](https://www.youneedabudget.com/).
+A CLI written in Golang for importing swedish bank statement files (currently only Handelsbanken .xls files) to the budgeting software [You Need A Budget (YNAB)](https://www.youneedabudget.com/).
 
 I created this for personal semi-automated use, since collecting and converting bank statements to QIF for YNAB was just to time-consuming.
 
